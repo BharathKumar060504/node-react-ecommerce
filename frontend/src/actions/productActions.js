@@ -25,8 +25,8 @@ const listProducts = (
 ) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
-    const { data } = await axios.get(
-      '/api/products?category=' +
+   const { data } = await axios.get(
+  'http://43.204.220.181:5000/api/products?category=' +
         category +
         '&searchKeyword=' +
         searchKeyword +
@@ -46,17 +46,14 @@ const saveProduct = (product) => async (dispatch, getState) => {
       userSignin: { userInfo },
     } = getState();
     if (!product._id) {
-      const { data } = await Axios.post('/api/products', product, {
+      const { data } = await Axios.post('http://43.204.220.181:5000/api/products', product, {
         headers: {
           Authorization: 'Bearer ' + userInfo.token,
         },
       });
       dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
     } else {
-      const { data } = await Axios.put(
-        '/api/products/' + product._id,
-        product,
-        {
+      const { data } = await Axios.put('http://43.204.220.181:5000/api/products/' + product._id, product, {
           headers: {
             Authorization: 'Bearer ' + userInfo.token,
           },
@@ -72,7 +69,7 @@ const saveProduct = (product) => async (dispatch, getState) => {
 const detailsProduct = (productId) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
-    const { data } = await axios.get('/api/products/' + productId);
+    const { data } = await axios.get('http://43.204.220.181:5000/api/products/' + productId);
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: PRODUCT_DETAILS_FAIL, payload: error.message });
@@ -85,7 +82,7 @@ const deleteProdcut = (productId) => async (dispatch, getState) => {
       userSignin: { userInfo },
     } = getState();
     dispatch({ type: PRODUCT_DELETE_REQUEST, payload: productId });
-    const { data } = await axios.delete('/api/products/' + productId, {
+    const { data } = await axios.delete('http://43.204.220.181:5000/api/products/' + productId, {
       headers: {
         Authorization: 'Bearer ' + userInfo.token,
       },
@@ -104,9 +101,8 @@ const saveProductReview = (productId, review) => async (dispatch, getState) => {
       },
     } = getState();
     dispatch({ type: PRODUCT_REVIEW_SAVE_REQUEST, payload: review });
-    const { data } = await axios.post(
-      `/api/products/${productId}/reviews`,
-      review,
+const { data } = await axios.post(
+  `http://43.204.220.181:5000/api/products/${productId}/reviews`,
       {
         headers: {
           Authorization: 'Bearer ' + token,
