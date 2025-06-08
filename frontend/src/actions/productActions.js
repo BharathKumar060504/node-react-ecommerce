@@ -15,23 +15,14 @@ import {
   PRODUCT_REVIEW_SAVE_FAIL,
   PRODUCT_REVIEW_SAVE_SUCCESS,
 } from '../constants/productConstants';
-import axios from 'axios';
 import Axios from 'axios';
+import { API_URL } from '../config';
 
-const listProducts = (
-  category = '',
-  searchKeyword = '',
-  sortOrder = ''
-) => async (dispatch) => {
+const listProducts = (category = '', searchKeyword = '', sortOrder = '') => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
-   const { data } = await axios.get(
-  'http://43.204.220.181:5000/api/products?category=' +
-        category +
-        '&searchKeyword=' +
-        searchKeyword +
-        '&sortOrder=' +
-        sortOrder
+    const { data } = await Axios.get(
+      `${API_URL}/api/products?category=${category}&searchKeyword=${searchKeyword}&sortOrder=${sortOrder}`
     );
     dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -45,22 +36,18 @@ const saveProduct = (product) => async (dispatch, getState) => {
     const {
       userSignin: { userInfo },
     } = getState();
-    if (!product._id) {
-      const { data } = await Axios.post('http://43.204.220.181:5000/api/products', product, {
-        headers: {
-          Authorization: 'Bearer ' + userInfo.token,
-        },
-      });
-      dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
-    } else {
-      const { data } = await Axios.put('http://43.204.220.181:5000/api/products/' + product._id, product, {
-          headers: {
-            Authorization: 'Bearer ' + userInfo.token,
-          },
-        }
-      );
-      dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
-    }
+
+    const config = {
+      headers: {
+        Authorization: 'Bearer ' + userInfo.token,
+      },
+    };
+
+    const { data } = product._id
+      ? await Axios.put(`${API_URL}/api/products/${product._id}`, product, config)
+      : await Axios.post(`${API_URL}/api/products`, product, config);
+
+    dispatch({ type: PRODUCT_SAVE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: PRODUCT_SAVE_FAIL, payload: error.message });
   }
@@ -69,7 +56,7 @@ const saveProduct = (product) => async (dispatch, getState) => {
 const detailsProduct = (productId) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
-    const { data } = await axios.get('http://43.204.220.181:5000/api/products/' + productId);
+    const { data } = await Axios.get(`${API_URL}/api/products/${productId}`);
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: PRODUCT_DETAILS_FAIL, payload: error.message });
@@ -78,15 +65,18 @@ const detailsProduct = (productId) => async (dispatch) => {
 
 const deleteProdcut = (productId) => async (dispatch, getState) => {
   try {
+    dispatch({ type: PRODUCT_DELETE_REQUEST, payload: productId });
+
     const {
       userSignin: { userInfo },
     } = getState();
-    dispatch({ type: PRODUCT_DELETE_REQUEST, payload: productId });
-    const { data } = await axios.delete('http://43.204.220.181:5000/api/products/' + productId, {
+
+    const { data } = await Axios.delete(`${API_URL}/api/products/${productId}`, {
       headers: {
         Authorization: 'Bearer ' + userInfo.token,
       },
     });
+
     dispatch({ type: PRODUCT_DELETE_SUCCESS, payload: data, success: true });
   } catch (error) {
     dispatch({ type: PRODUCT_DELETE_FAIL, payload: error.message });
@@ -95,24 +85,26 @@ const deleteProdcut = (productId) => async (dispatch, getState) => {
 
 const saveProductReview = (productId, review) => async (dispatch, getState) => {
   try {
+    dispatch({ type: PRODUCT_REVIEW_SAVE_REQUEST, payload: review });
+
     const {
       userSignin: {
         userInfo: { token },
       },
     } = getState();
-    dispatch({ type: PRODUCT_REVIEW_SAVE_REQUEST, payload: review });
-const { data } = await axios.post(
-  `http://43.204.220.181:5000/api/products/${productId}/reviews`,
-  review,
+
+    const { data } = await Axios.post(
+      `${API_URL}/api/products/${productId}/reviews`,
+      review,
       {
         headers: {
           Authorization: 'Bearer ' + token,
         },
       }
     );
+
     dispatch({ type: PRODUCT_REVIEW_SAVE_SUCCESS, payload: data });
   } catch (error) {
-    // report error
     dispatch({ type: PRODUCT_REVIEW_SAVE_FAIL, payload: error.message });
   }
 };
