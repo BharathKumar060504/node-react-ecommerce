@@ -14,9 +14,9 @@ import {
   PRODUCT_REVIEW_SAVE_REQUEST,
   PRODUCT_REVIEW_SAVE_FAIL,
   PRODUCT_REVIEW_SAVE_SUCCESS,
-} from '../constants/productConstants';
+} from '../constants/productConstants.js';
 import Axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL } from '../config.js';
 
 const listProducts = (category = '', searchKeyword = '', sortOrder = '') => async (dispatch) => {
   try {
