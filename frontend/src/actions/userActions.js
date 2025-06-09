@@ -1,13 +1,13 @@
 import Axios from "axios";
 import Cookie from 'js-cookie';
-import { API_URL } from '../config';
+import { API_URL } from '../config.js';
 
 import {
   USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS,
   USER_SIGNIN_FAIL, USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS, USER_REGISTER_FAIL,
   USER_LOGOUT, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL
-} from "../constants/userConstants";
+} from "../constants/userConstants.js";
 
 const update = ({ userId, name, email, password }) => async (dispatch, getState) => {
   const { userSignin: { userInfo } } = getState();
