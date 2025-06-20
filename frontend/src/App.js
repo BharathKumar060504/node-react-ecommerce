@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import {Route, Link } from 'react-router-dom';
 import './App.css';
 import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
@@ -26,7 +26,6 @@ function App() {
     document.querySelector('.sidebar').classList.remove('open');
   };
   return (
-    <BrowserRouter>
       <div className="grid-container">
         <header className="header">
           <div className="brand">
@@ -87,7 +86,6 @@ function App() {
         </main>
         <footer className="footer">All right reserved.</footer>
       </div>
-    </BrowserRouter>
   );
 }
 

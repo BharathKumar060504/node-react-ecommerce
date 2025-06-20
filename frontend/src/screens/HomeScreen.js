@@ -25,9 +25,11 @@ function HomeScreen(props) {
     dispatch(listProducts(category, searchKeyword, sortOrder));
   };
   const sortHandler = (e) => {
-    setSortOrder(e.target.value);
-    dispatch(listProducts(category, searchKeyword, sortOrder));
-  };
+  const selectedOrder = e.target.value;
+  setSortOrder(selectedOrder);
+  dispatch(listProducts(category, searchKeyword, selectedOrder));
+};
+
 
   return (
     <>
@@ -87,4 +89,10 @@ function HomeScreen(props) {
     <li>No products found.</li>
   )}
 </ul>
+    )}
+    </>
+  );
+}
+
 export default HomeScreen;
+

@@ -93,7 +93,7 @@ function ProductScreen(props) {
                   <select
                     value={qty}
                     onChange={(e) => {
-                      setQty(e.target.value);
+                      setQty(Number(e.target.value));
                     }}
                   >
                     {[...Array(product.countInStock).keys()].map((x) => (
@@ -120,13 +120,13 @@ function ProductScreen(props) {
             <h2>Reviews</h2>
             {!product.reviews.length && <div>There is no review</div>}
             <ul className="review" id="reviews">
-              {product.reviews.map((review) => (
+              {(product.reviews || []).map((review) => (
                 <li key={review._id}>
                   <div>{review.name}</div>
                   <div>
                     <Rating value={review.rating}></Rating>
                   </div>
-                  <div>{review.createdAt.substring(0, 10)}</div>
+                  <div>{review.createdAt?.substring(0, 10) || 'N/A'}</div>
                   <div>{review.comment}</div>
                 </li>
               ))}

@@ -25,9 +25,17 @@ function PlaceOrderScreen(props) {
   const placeOrderHandler = () => {
     // create an order
     dispatch(createOrder({
-      orderItems: cartItems, shipping, payment, itemsPrice, shippingPrice,
-      taxPrice, totalPrice
-    }));
+  orderItems: cartItems,
+  shipping: cart.shipping,  //  matches schema
+  payment: {
+    paymentMethod: cart.payment.paymentMethod  
+  },
+  itemsPrice,
+  shippingPrice,
+  taxPrice,
+  totalPrice
+}));
+
   }
   useEffect(() => {
     if (success) {
